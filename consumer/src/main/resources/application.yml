@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: microservice-consumer
+server:
+  port: 8010
+user: 
+  userServicePath: http://localhost:7900/user/
+eureka:
+  client:
+    healthcheck:
+      enabled: true
+    serviceUrl:
+      #defaultZone: http://user:password@localhost:8761/eureka
+      defaultZone: http://root:123456@localhost:8761/eureka
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${spring.cloud.client.ipAddress}:${spring.application.instance_id:${server.port}}
+    metadata-map:
+      zone: ABC      # eureka可以理解的元数据
+      lilizhou: BBC  # 不会影响客户端行为
+    lease-renewal-interval-in-seconds: 5
+# 在配置中使用RibbonClirnt，优先级高于代码中使用的RibbonClirnt。效果等同于@RibbonClient(name = "microservice-provider", configuration = TestConfiguration.class)
+#microservice-provider:
+#  ribbon:
+#    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule
