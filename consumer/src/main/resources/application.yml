@@ -19,7 +19,18 @@ eureka:
       zone: ABC      # eureka可以理解的元数据
       lilizhou: BBC  # 不会影响客户端行为
     lease-renewal-interval-in-seconds: 5
-# 在配置中使用RibbonClirnt，优先级高于代码中使用的RibbonClirnt。效果等同于@RibbonClient(name = "microservice-provider", configuration = TestConfiguration.class)
+
+
+
+# 1.在配置中使用RibbonClirnt，优先级高于代码中使用的RibbonClient。效果等同于@RibbonClient(name = "microservice-provider", configuration = TestConfiguration.class)
 #microservice-provider:
 #  ribbon:
 #    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule
+
+# 2.只使用ribbon而不使用eureka时的配置。此时只会访问7900上的provider微服务。
+#ribbon:
+#  eureka:
+#   enabled: false
+#microservice-provider:
+#  ribbon:
+#    listOfServers: localhost:7900

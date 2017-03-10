@@ -1,6 +1,7 @@
 package com.itmuch.cloud.controller;
 
 import com.itmuch.cloud.entity.User;
+import com.itmuch.cloud.feign.UserFeignClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.ServiceInstance;
@@ -25,6 +26,31 @@ public class MovieController
   private String userServicePath;
   @Autowired
   private LoadBalancerClient loadBalancerClient;
+
+  @Autowired
+  private UserFeignClient userFeignClient;
+
+  @GetMapping("/movie-feign/{id}")
+  public User findByFeign(@PathVariable Long id) {
+    return this.userFeignClient.findById(id);
+  }
+
+  @GetMapping("/test-post")
+  public User testPost() {
+    User user = new User();
+    user.setName("xiaojian");
+    return this.userFeignClient.postUser(user);
+  }
+
+  @GetMapping("/test-get")
+  public User testGet() {
+    User user = new User();
+    user.setName("xiaojian");
+    return this.userFeignClient.getUser(user);
+  }
+
+
+
 
   @GetMapping("/movie/{id}")
   public User findById(@PathVariable Long id) {
