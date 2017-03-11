@@ -1,10 +1,20 @@
 package com.itmuch.cloud.feign;
 
 import com.itmuch.cloud.entity.User;
+import com.itmuch.config.FeignLogConfiguration;
 import org.springframework.cloud.netflix.feign.FeignClient;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
-@FeignClient("microservice-provider")
+/**
+ * @Author bjxiaojian
+ * @Date 2017/3/10
+ * @Description 在FeignLogConfiguration配置UserFeignClient的日志级别为FULL，
+ *              则此feign的调用会打印所有日志信息，包括debug级别的日志
+ */
+@FeignClient(value = "microservice-provider", configuration = FeignLogConfiguration.class)
 public interface UserFeignClient
 {
   @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)

@@ -1,6 +1,7 @@
 package com.itmuch.cloud.controller;
 
 import com.itmuch.cloud.entity.User;
+import com.itmuch.cloud.feign.TestFeignClient;
 import com.itmuch.cloud.feign.UserFeignClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,6 +31,9 @@ public class MovieController
   @Autowired
   private UserFeignClient userFeignClient;
 
+  @Autowired
+  private TestFeignClient testFeignClient;
+
   @GetMapping("/movie-feign/{id}")
   public User findByFeign(@PathVariable Long id) {
     return this.userFeignClient.findById(id);
@@ -49,12 +53,15 @@ public class MovieController
     return this.userFeignClient.getUser(user);
   }
 
-
+  @GetMapping("/{serviceName}")
+  public String findServiceInfoFromEurekaByServiceName(@PathVariable String serviceName) {
+    return this.testFeignClient.findServiceInfoFromEurekaByServiceName(serviceName);
+  }
 
 
   @GetMapping("/movie/{id}")
   public User findById(@PathVariable Long id) {
-    //硬编码形式调用  http://localhost:7900/simple/
+    //硬编码形式调用  http://localhost:7900/user/
 //    return this.restTemplate.getForObject(this.userServicePath + id, User.class);
 //    使用provider的application name进行调用，避免url硬编码。  VIP virtual IP
     return this.restTemplate.getForObject("http://microservice-provider/user/" + id, User.class);
